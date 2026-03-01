@@ -222,3 +222,22 @@ By default this uses the rule-based judge. To use OpenAI judge:
 - provide an original image using `--original-image-file-path`, or place one of:
   `original.jpg`, `original.jpeg`, `original.png`, `source.jpg`, `source.jpeg`, `source.png`
   inside the frames directory
+
+### Run Full Pipeline Orchestrator
+
+To run generation + extraction + judge in one command:
+
+```bash
+uv run python run_pose_pipeline_orchestrator.py \
+  --image /absolute/path/to/original_image.jpg \
+  --preset rotate_left \
+  --output-directory ./outputs/orchestrator
+```
+
+This writes:
+
+- extracted frames under `storage/<job>/<preset>/frames/`
+- judge outputs under `outputs/orchestrator/frame_judge_results_<timestamp>/`
+- orchestrator summary under `outputs/orchestrator/pipeline_orchestrator/pipeline_summary_<job>.json`
+
+This orchestrator is library-first (in-process Python imports). It is API-ready because it emits a stable JSON summary payload that can be returned directly by a future backend endpoint.

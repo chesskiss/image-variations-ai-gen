@@ -10,3 +10,5 @@ uv run pytest tests/test_video_frame_extraction_service_integration.py -s --base
 
 video gen
 uv run python run_single_image_transform.py --image "/Users/arnoldcheskis/Documents/Images/green card.JPG"  --preset rotate_left
+orchestrator (gen -> extract -> judge)
+uv run python run_pose_pipeline_orchestrator.py --image "/Users/arnoldcheskis/Documents/Images/green card.JPG" --preset rotate_left --output-directory ./outputs/orchestrator

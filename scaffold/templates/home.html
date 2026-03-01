@@ -10,50 +10,34 @@
     <main class="page-layout">
       <section class="card">
         <h1>PoseVariations</h1>
-        <p class="muted-text">Upload one model photo and choose exactly two pose presets.</p>
+        <p class="muted-text">Upload one model photo, choose one pose preset, and run full pipeline.</p>
 
-        <form action="/jobs" method="post" enctype="multipart/form-data" class="vertical-form" id="upload-form">
+        {% if error_message %}
+        <p class="error-text">{{ error_message }}</p>
+        {% endif %}
+
+        <form action="/run" method="post" enctype="multipart/form-data" class="vertical-form">
           <label for="uploaded_image_file">Model photo (JPEG or PNG)</label>
-          <input id="uploaded_image_file" name="uploaded_image_file" type="file" accept="image/jpeg,image/png" required />
+          <input
+            id="uploaded_image_file"
+            name="uploaded_image_file"
+            type="file"
+            accept="image/jpeg,image/png"
+            required
+          />
 
-          <fieldset>
-            <legend>Pose presets (pick exactly two)</legend>
+          <label for="selected_pose_preset_identifier">Pose preset</label>
+          <select id="selected_pose_preset_identifier" name="selected_pose_preset_identifier" required>
             {% for pose_preset in available_pose_presets %}
-            <label class="checkbox-row">
-              <input
-                type="checkbox"
-                name="selected_pose_preset_identifiers"
-                value="{{ pose_preset.pose_preset_identifier }}"
-              />
+            <option value="{{ pose_preset.pose_preset_identifier }}">
               {{ pose_preset.pose_preset_display_name }}
-            </label>
+            </option>
             {% endfor %}
-          </fieldset>
+          </select>
 
-          <button type="submit">Start Generation Job</button>
+          <button type="submit">Run Orchestrator</button>
         </form>
-
-        <p id="form-error" class="error-text" hidden>Please choose exactly two presets.</p>
       </section>
     </main>
-
-    <script>
-      const uploadForm = document.getElementById("upload-form");
-      const formError = document.getElementById("form-error");
-
-      uploadForm.addEventListener("submit", (event) => {
-        const selectedPresetCount = document.querySelectorAll(
-          "input[name='selected_pose_preset_identifiers']:checked"
-        ).length;
-
-        if (selectedPresetCount !== 2) {
-          event.preventDefault();
-          formError.hidden = false;
-          return;
-        }
-
-        formError.hidden = true;
-      });
-    </script>
   </body>
 </html>
