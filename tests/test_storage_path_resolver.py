@@ -11,7 +11,9 @@ from frame_extraction_stage.storage_path_resolver import (
 )
 
 
-def test_storage_path_resolution_prevents_escape_from_generation_job_directory(tmp_path: Path) -> None:
+def test_storage_path_resolution_prevents_escape_from_generation_job_directory(
+    tmp_path: Path,
+) -> None:
     storage_base_directory = tmp_path / "storage"
     storage_base_directory.mkdir(parents=True, exist_ok=True)
 

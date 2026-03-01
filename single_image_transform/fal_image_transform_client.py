@@ -27,7 +27,9 @@ class FalImageTransformClient:
         prompt_template: str,
     ) -> Path:
         if not input_image_file_path.exists() or not input_image_file_path.is_file():
-            raise SingleImageTransformError(f"Input image file was not found: {input_image_file_path}")
+            raise SingleImageTransformError(
+                f"Input image file was not found: {input_image_file_path}"
+            )
 
         uploaded_image_url = fal_client.upload_file(str(input_image_file_path))
         generation_result_payload = fal_client.subscribe(
@@ -41,7 +43,9 @@ class FalImageTransformClient:
 
         generated_asset_url = self._extract_generated_asset_url(generation_result_payload)
         output_extension = self._derive_output_extension_from_url(generated_asset_url)
-        output_file_path = self._settings.output_directory / f"generated_{uuid4().hex}{output_extension}"
+        output_file_path = (
+            self._settings.output_directory / f"generated_{uuid4().hex}{output_extension}"
+        )
         self._download_generated_asset(generated_asset_url, output_file_path)
         return output_file_path
 

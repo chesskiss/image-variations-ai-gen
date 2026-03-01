@@ -42,16 +42,16 @@ class VideoFrameExtractionService:
         self,
         generated_video_asset: GeneratedVideoAsset,
     ) -> list[ExtractedFrameAsset]:
-        video_file_path_for_generation_job = (
-            self._storage_path_resolver.validate_local_video_file_path_within_generation_job_directory(
-                generation_job_identifier=generated_video_asset.generation_job_identifier,
-                local_video_file_path=generated_video_asset.local_video_file_path,
-            )
+        video_file_path_for_generation_job = self._storage_path_resolver.validate_local_video_file_path_within_generation_job_directory(
+            generation_job_identifier=generated_video_asset.generation_job_identifier,
+            local_video_file_path=generated_video_asset.local_video_file_path,
         )
 
-        output_directory_for_extracted_frames = self._storage_path_resolver.resolve_frames_output_directory(
-            generation_job_identifier=generated_video_asset.generation_job_identifier,
-            pose_preset_identifier=generated_video_asset.pose_preset_identifier,
+        output_directory_for_extracted_frames = (
+            self._storage_path_resolver.resolve_frames_output_directory(
+                generation_job_identifier=generated_video_asset.generation_job_identifier,
+                pose_preset_identifier=generated_video_asset.pose_preset_identifier,
+            )
         )
         deterministic_output_file_pattern = (
             output_directory_for_extracted_frames
@@ -69,14 +69,19 @@ class VideoFrameExtractionService:
             command_arguments=ffmpeg_command_arguments,
             timeout_seconds=90,
         )
-        self._ffmpeg_command_runner.raise_error_when_execution_failed(ffmpeg_command_execution_result)
+        self._ffmpeg_command_runner.raise_error_when_execution_failed(
+            ffmpeg_command_execution_result
+        )
 
         extracted_frame_assets = self._build_extracted_frame_assets_from_output_directory(
             generated_video_asset=generated_video_asset,
             output_directory_for_extracted_frames=output_directory_for_extracted_frames,
         )
 
-        if len(extracted_frame_assets) > self._video_frame_extraction_configuration.max_extracted_frames_per_video:
+        if (
+            len(extracted_frame_assets)
+            > self._video_frame_extraction_configuration.max_extracted_frames_per_video
+        ):
             raise VideoFrameExtractionServiceError(
                 "Extracted frame count exceeded configured maximum limit."
             )
@@ -122,7 +127,9 @@ class VideoFrameExtractionService:
         extracted_frame_assets: list[ExtractedFrameAsset] = []
 
         for extracted_frame_file_path in extracted_frame_file_paths:
-            frame_sequence_number = self._parse_frame_sequence_number(extracted_frame_file_path.name)
+            frame_sequence_number = self._parse_frame_sequence_number(
+                extracted_frame_file_path.name
+            )
             image_width_pixels, image_height_pixels = self._read_image_dimensions_if_possible(
                 extracted_frame_file_path
             )
@@ -147,7 +154,9 @@ class VideoFrameExtractionService:
                 )
             )
 
-        extracted_frame_assets.sort(key=lambda extracted_frame_asset: extracted_frame_asset.frame_sequence_number)
+        extracted_frame_assets.sort(
+            key=lambda extracted_frame_asset: extracted_frame_asset.frame_sequence_number
+        )
         return extracted_frame_assets
 
     @staticmethod
@@ -160,7 +169,9 @@ class VideoFrameExtractionService:
         return int(frame_sequence_match.group(1))
 
     @staticmethod
-    def _read_image_dimensions_if_possible(extracted_frame_file_path: Path) -> tuple[int | None, int | None]:
+    def _read_image_dimensions_if_possible(
+        extracted_frame_file_path: Path,
+    ) -> tuple[int | None, int | None]:
         try:
             with Image.open(extracted_frame_file_path) as extracted_frame_image:
                 return extracted_frame_image.size

@@ -44,7 +44,7 @@ include = [
   "frame_extraction_stage",
   "frame_judge_stage",
   "orchestration_stage",
-  "scaffold",
+  "ui",
   "tests/run_modules/run_single_image_transform.py",
   "tests/run_modules/run_frame_judge_stage.py",
   "run_pose_pipeline_orchestrator.py",

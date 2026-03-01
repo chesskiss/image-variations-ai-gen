@@ -1,0 +1,29 @@
+{
+  "job_id": "73e833202384459aa4461db2c8361f88",
+  "state": "completed",
+  "progress_percent": 100,
+  "current_stage": "completed",
+  "pose_preset_identifier": "rotate_left",
+  "uploaded_image_file_path": "/app/storage/ui_uploads/73e833202384459aa4461db2c8361f88/original.png",
+  "orchestrator_command_arguments": [
+    "uv",
+    "run",
+    "python",
+    "run_pose_pipeline_orchestrator.py",
+    "--image",
+    "/app/storage/ui_uploads/73e833202384459aa4461db2c8361f88/original.png",
+    "--preset",
+    "rotate_left",
+    "--job-id",
+    "73e833202384459aa4461db2c8361f88",
+    "--output-directory",
+    "/app/outputs/orchestrator_ui"
+  ],
+  "started_at_utc": "2026-03-01T23:49:49.644776+00:00",
+  "finished_at_utc": "2026-03-01T23:50:36.514103+00:00",
+  "orchestrator_return_code": 0,
+  "orchestrator_stdout_log_file_path": "/app/outputs/orchestrator_ui/jobs/73e833202384459aa4461db2c8361f88/orchestrator_stdout.log",
+  "orchestrator_stderr_log_file_path": "/app/outputs/orchestrator_ui/jobs/73e833202384459aa4461db2c8361f88/orchestrator_stderr.log",
+  "pipeline_summary_json_file_path": "/app/outputs/orchestrator_ui/pipeline_orchestrator/pipeline_summary_73e833202384459aa4461db2c8361f88.json",
+  "error_message": null
+}

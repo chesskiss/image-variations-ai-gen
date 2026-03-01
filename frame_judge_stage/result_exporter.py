@@ -24,7 +24,9 @@ class FrameJudgeResultExporter:
         result_output_directory = output_base_directory / f"frame_judge_results_{timestamp_label}"
         result_output_directory.mkdir(parents=True, exist_ok=True)
 
-        selected_frame_sequence_number_set = set(frame_judge_decision.selected_frame_sequence_numbers)
+        selected_frame_sequence_number_set = set(
+            frame_judge_decision.selected_frame_sequence_numbers
+        )
         selected_frames_output_directory = result_output_directory / "selected_frames"
         selected_frames_output_directory.mkdir(parents=True, exist_ok=True)
 
@@ -33,7 +35,9 @@ class FrameJudgeResultExporter:
             for frame_candidate in frame_candidates_for_judging
         }
         for selected_frame_sequence_number in selected_frame_sequence_number_set:
-            selected_frame_candidate = frame_candidate_by_sequence_number.get(selected_frame_sequence_number)
+            selected_frame_candidate = frame_candidate_by_sequence_number.get(
+                selected_frame_sequence_number
+            )
             if selected_frame_candidate is None:
                 continue
             destination_file_path = (
@@ -55,9 +59,16 @@ class FrameJudgeResultExporter:
             "selected_count": frame_judge_decision.selected_count,
             "selected_frame_sequence_numbers": frame_judge_decision.selected_frame_sequence_numbers,
         }
-        judge_decision_json_file_path.write_text(json.dumps(decision_payload, indent=2), encoding="utf-8")
+        judge_decision_json_file_path.write_text(
+            json.dumps(decision_payload, indent=2), encoding="utf-8"
+        )
 
-        ranked_scores_payload = [asdict(frame_judge_score) for frame_judge_score in frame_judge_decision.ranked_frame_scores]
-        ranked_scores_json_file_path.write_text(json.dumps(ranked_scores_payload, indent=2), encoding="utf-8")
+        ranked_scores_payload = [
+            asdict(frame_judge_score)
+            for frame_judge_score in frame_judge_decision.ranked_frame_scores
+        ]
+        ranked_scores_json_file_path.write_text(
+            json.dumps(ranked_scores_payload, indent=2), encoding="utf-8"
+        )
 
         return result_output_directory

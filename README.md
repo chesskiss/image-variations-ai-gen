@@ -34,7 +34,7 @@ Persistent data:
 - `./storage`
 - `./outputs`
 
-## Developer Usage (uv / Local)
+## Developer Usage (uv / Local) - Works on MacOS (Windows not guaranteed)
 
 ### Requirements
 - Python 3.11+
@@ -48,8 +48,16 @@ uv sync
 
 ### Run UI bridge locally
 ```bash
-uv run uvicorn scaffold.app:application --reload
+uv run uvicorn ui.app:application --reload
 ```
+
+## Useful Commands
+
+- Lint: `uv run ruff check .`
+- Format: `uv run ruff format .`
+- Type check: `uv run mypy .`
+- Test: `uv run pytest --cov=pose_variations --cov-report=term-missing`
+- Pre-commit install: `uv run pre-commit install`
 
 ### Run full orchestrator directly
 ```bash
@@ -68,6 +76,7 @@ uv run python tests/run_modules/run_frame_judge_stage.py \
   --preset-id <pose_preset_identifier> \
   --output-directory ./outputs
 ```
+
 
 ### Run tests
 ```bash

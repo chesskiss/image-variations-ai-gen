@@ -17,7 +17,9 @@ def build_generation_job_frame_extraction_status_payload(
                 "pose_preset_identifier": str(extracted_frame_asset.pose_preset_identifier),
                 "frame_sequence_number": extracted_frame_asset.frame_sequence_number,
                 "timestamp_seconds": extracted_frame_asset.timestamp_seconds,
-                "local_frame_image_file_path": str(extracted_frame_asset.local_frame_image_file_path),
+                "local_frame_image_file_path": str(
+                    extracted_frame_asset.local_frame_image_file_path
+                ),
                 "image_file_format": extracted_frame_asset.image_file_format,
                 "image_width_pixels": extracted_frame_asset.image_width_pixels,
                 "image_height_pixels": extracted_frame_asset.image_height_pixels,

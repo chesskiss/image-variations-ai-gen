@@ -70,9 +70,7 @@ class FfmpegCommandRunner:
         ffmpeg_command_execution_result: FfmpegCommandExecutionResult,
     ) -> None:
         if ffmpeg_command_execution_result.timed_out:
-            raise FfmpegCommandRunnerError(
-                "FFmpeg command timed out while extracting frames."
-            )
+            raise FfmpegCommandRunnerError("FFmpeg command timed out while extracting frames.")
 
         if ffmpeg_command_execution_result.return_code != 0:
             raise FfmpegCommandRunnerError(

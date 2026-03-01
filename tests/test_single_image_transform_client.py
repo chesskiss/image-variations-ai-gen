@@ -30,7 +30,9 @@ class _FakeHttpClient:
         return _FakeResponse(self._content)
 
 
-def test_transform_local_image_writes_output_file(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_transform_local_image_writes_output_file(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     input_image_file_path = tmp_path / "source.jpg"
     input_image_file_path.write_bytes(b"source-bytes")
 

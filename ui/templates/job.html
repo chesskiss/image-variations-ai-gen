@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Image Variations Job</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page-layout">
+      <section class="card">
+        <h1>Pipeline Job</h1>
+        <p class="status-line">Job ID: <strong id="job-id">{{ generation_job_identifier }}</strong></p>
+        <p class="status-line">Preset: <strong>{{ pose_preset_identifier }}</strong></p>
+
+        <div class="progress-header">
+          <span id="state-badge" class="state-badge state-queued">queued</span>
+          <span id="stage-label" class="muted-text">uploaded</span>
+        </div>
+        <div class="progress-track" aria-label="Pipeline progress" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+          <div id="progress-fill" class="progress-fill" style="width: 0%"></div>
+        </div>
+        <p class="status-line"><strong id="progress-percent">0%</strong></p>
+
+        <p id="error-message" class="error-text hidden"></p>
+
+        <section id="result-section" class="hidden">
+          <h2>Selected Frames</h2>
+          <div id="selected-frame-grid" class="media-grid"></div>
+
+          <h2>Artifacts</h2>
+          <ul id="artifact-links"></ul>
+
+          <h2>Selected Frame Sequence Numbers</h2>
+          <p id="selected-frame-sequence-numbers"></p>
+        </section>
+
+        <p><a href="/">Run another job</a></p>
+      </section>
+    </main>
+
+    <script>
+      const generationJobIdentifier = "{{ generation_job_identifier }}";
+      const progressFillElement = document.getElementById("progress-fill");
+      const progressPercentElement = document.getElementById("progress-percent");
+      const stateBadgeElement = document.getElementById("state-badge");
+      const stageLabelElement = document.getElementById("stage-label");
+      const errorMessageElement = document.getElementById("error-message");
+      const resultSectionElement = document.getElementById("result-section");
+      const selectedFrameGridElement = document.getElementById("selected-frame-grid");
+      const artifactLinksElement = document.getElementById("artifact-links");
+      const selectedFrameSequenceNumbersElement = document.getElementById("selected-frame-sequence-numbers");
+
+      function setStateBadgeClass(jobState) {
+        stateBadgeElement.className = `state-badge state-${jobState}`;
+      }
+
+      function renderResults(jobPayload) {
+        const artifactUrls = jobPayload.artifact_urls || {};
+        const pipelineSummaryPayload = jobPayload.pipeline_summary_payload || {};
+        const selectedFrameImageUrls = artifactUrls.selected_frame_image_urls || [];
+
+        selectedFrameGridElement.innerHTML = "";
+        selectedFrameImageUrls.forEach((selectedFrameImageUrl) => {
+          const articleElement = document.createElement("article");
+          articleElement.className = "media-card";
+          const imageElement = document.createElement("img");
+          imageElement.src = selectedFrameImageUrl;
+          imageElement.alt = "Selected frame";
+          articleElement.appendChild(imageElement);
+          selectedFrameGridElement.appendChild(articleElement);
+        });
+
+        artifactLinksElement.innerHTML = "";
+        const artifactEntries = [
+          ["Pipeline summary JSON", artifactUrls.summary_json_url],
+          ["Judge decision JSON", artifactUrls.judge_decision_json_url],
+          ["Ranked scores JSON", artifactUrls.ranked_scores_json_url],
+        ];
+        artifactEntries.forEach(([label, url]) => {
+          if (!url) {
+            return;
+          }
+          const listItemElement = document.createElement("li");
+          const linkElement = document.createElement("a");
+          linkElement.href = url;
+          linkElement.target = "_blank";
+          linkElement.rel = "noreferrer";
+          linkElement.textContent = label;
+          listItemElement.appendChild(linkElement);
+          artifactLinksElement.appendChild(listItemElement);
+        });
+
+        const frameJudgeDecision = pipelineSummaryPayload.frame_judge_decision || {};
+        selectedFrameSequenceNumbersElement.textContent = JSON.stringify(
+          frameJudgeDecision.selected_frame_sequence_numbers || []
+        );
+
+        resultSectionElement.classList.remove("hidden");
+      }
+
+      async function pollJobStatus() {
+        try {
+          const response = await fetch(`/api/jobs/${generationJobIdentifier}`);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch job status (${response.status})`);
+          }
+
+          const jobPayload = await response.json();
+          const progressPercent = Number(jobPayload.progress_percent || 0);
+          const jobState = String(jobPayload.state || "queued");
+          const currentStage = String(jobPayload.current_stage || "");
+
+          progressFillElement.style.width = `${progressPercent}%`;
+          progressPercentElement.textContent = `${progressPercent}%`;
+          stateBadgeElement.textContent = jobState;
+          stageLabelElement.textContent = currentStage;
+          setStateBadgeClass(jobState);
+
+          if (jobState === "completed") {
+            renderResults(jobPayload);
+            errorMessageElement.classList.add("hidden");
+            window.clearInterval(pollingIntervalIdentifier);
+            return;
+          }
+
+          if (jobState === "failed") {
+            const errorMessage = String(jobPayload.error_message || "Pipeline job failed.");
+            errorMessageElement.textContent = errorMessage;
+            errorMessageElement.classList.remove("hidden");
+            window.clearInterval(pollingIntervalIdentifier);
+          }
+        } catch (error) {
+          errorMessageElement.textContent = String(error);
+          errorMessageElement.classList.remove("hidden");
+          window.clearInterval(pollingIntervalIdentifier);
+        }
+      }
+
+      const pollingIntervalIdentifier = window.setInterval(pollJobStatus, 1500);
+      pollJobStatus();
+    </script>
+  </body>
+</html>

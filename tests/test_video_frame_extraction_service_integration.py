@@ -19,7 +19,9 @@ from frame_extraction_stage.video_frame_extraction_service import (
 
 
 @pytest.mark.slow
-@pytest.mark.skipif(shutil.which("ffmpeg") is None, reason="ffmpeg is required for extraction test.")
+@pytest.mark.skipif(
+    shutil.which("ffmpeg") is None, reason="ffmpeg is required for extraction test."
+)
 def test_video_frame_extraction_from_fixture_mp4(tmp_path: Path) -> None:
     fixture_video_file_path = Path("tests/fixtures/tiny_sample.mp4")
     if not fixture_video_file_path.exists():
@@ -32,7 +34,10 @@ def test_video_frame_extraction_from_fixture_mp4(tmp_path: Path) -> None:
     pose_preset_identifier = PosePresetIdentifier("rotate_right")
 
     local_video_file_path_for_generation_job = (
-        storage_base_directory / str(generation_job_identifier) / str(pose_preset_identifier) / "video.mp4"
+        storage_base_directory
+        / str(generation_job_identifier)
+        / str(pose_preset_identifier)
+        / "video.mp4"
     )
     local_video_file_path_for_generation_job.parent.mkdir(parents=True, exist_ok=True)
     local_video_file_path_for_generation_job.write_bytes(fixture_video_file_path.read_bytes())
@@ -59,8 +64,10 @@ def test_video_frame_extraction_from_fixture_mp4(tmp_path: Path) -> None:
         ffmpeg_command_runner=ffmpeg_command_runner,
     )
 
-    extracted_frame_assets = video_frame_extraction_service.extract_candidate_frames_from_generated_video(
-        generated_video_asset
+    extracted_frame_assets = (
+        video_frame_extraction_service.extract_candidate_frames_from_generated_video(
+            generated_video_asset
+        )
     )
 
     assert extracted_frame_assets

@@ -33,7 +33,9 @@ class OpenAiVisionFrameJudge:
         if not frame_candidates_for_judging:
             return []
         if not self._openai_api_key:
-            raise OpenAiVisionFrameJudgeError("OPENAI_API_KEY is required when OpenAI frame judge is enabled.")
+            raise OpenAiVisionFrameJudgeError(
+                "OPENAI_API_KEY is required when OpenAI frame judge is enabled."
+            )
         if original_image_file_path is None:
             raise OpenAiVisionFrameJudgeError(
                 "original_image_file_path is required for OpenAI similarity-based frame judging."
@@ -166,9 +168,7 @@ class OpenAiVisionFrameJudge:
 
         parsed_score = float(score_match.group(1))
         if parsed_score < 0.0 or parsed_score > 1.0:
-            raise OpenAiVisionFrameJudgeError(
-                f"Parsed score is outside [0,1]: {parsed_score}"
-            )
+            raise OpenAiVisionFrameJudgeError(f"Parsed score is outside [0,1]: {parsed_score}")
         return parsed_score
 
     @staticmethod

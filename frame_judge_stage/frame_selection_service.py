@@ -65,7 +65,9 @@ class FrameSelectionService:
             for frame_judge_score in ranked_frame_scores
             if frame_judge_score.judge_score >= self._minimum_score_threshold
         ]
-        selected_frame_sequence_numbers = threshold_passing_frame_sequence_numbers[: self._selected_count]
+        selected_frame_sequence_numbers = threshold_passing_frame_sequence_numbers[
+            : self._selected_count
+        ]
 
         return FrameJudgeDecision(
             generation_job_identifier=generation_job_identifier,
@@ -105,8 +107,7 @@ class FrameSelectionService:
                     "Frame judge score must be normalized to the [0,1] range."
                 )
             if frame_judge_score.judge_confidence is not None and (
-                frame_judge_score.judge_confidence < 0.0
-                or frame_judge_score.judge_confidence > 1.0
+                frame_judge_score.judge_confidence < 0.0 or frame_judge_score.judge_confidence > 1.0
             ):
                 raise FrameSelectionServiceError(
                     "Frame judge confidence must be normalized to the [0,1] range."

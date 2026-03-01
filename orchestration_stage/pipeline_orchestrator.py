@@ -68,7 +68,10 @@ class PosePipelineOrchestrator:
             raise ValueError(f"Unsupported pose preset identifier: {pose_preset_identifier}")
 
         resolved_input_image_file_path = input_image_file_path.expanduser().resolve()
-        if not resolved_input_image_file_path.exists() or not resolved_input_image_file_path.is_file():
+        if (
+            not resolved_input_image_file_path.exists()
+            or not resolved_input_image_file_path.is_file()
+        ):
             raise ValueError(f"Input image file does not exist: {resolved_input_image_file_path}")
 
         selected_generation_job_identifier = generation_job_identifier or uuid4().hex
@@ -83,12 +86,16 @@ class PosePipelineOrchestrator:
             single_image_transform_settings=single_image_transform_settings,
         )
 
-        storage_path_resolver = StoragePathResolver(frame_extraction_stage_settings.storage_directory)
-        generated_video_asset_for_extraction = self._build_generated_video_asset_for_extraction_stage(
-            selected_generation_job_identifier=selected_generation_job_identifier,
-            pose_preset_identifier=pose_preset_identifier,
-            generated_video_file_path=generated_video_file_path,
-            storage_path_resolver=storage_path_resolver,
+        storage_path_resolver = StoragePathResolver(
+            frame_extraction_stage_settings.storage_directory
+        )
+        generated_video_asset_for_extraction = (
+            self._build_generated_video_asset_for_extraction_stage(
+                selected_generation_job_identifier=selected_generation_job_identifier,
+                pose_preset_identifier=pose_preset_identifier,
+                generated_video_file_path=generated_video_file_path,
+                storage_path_resolver=storage_path_resolver,
+            )
         )
         frames_directory_path = storage_path_resolver.resolve_frames_output_directory(
             generation_job_identifier=generated_video_asset_for_extraction.generation_job_identifier,
@@ -168,11 +175,15 @@ class PosePipelineOrchestrator:
         generation_job_directory_path = storage_path_resolver.resolve_generation_job_directory(
             extraction_generation_job_identifier
         )
-        generation_video_directory_path = generation_job_directory_path / pose_preset_identifier / "video"
+        generation_video_directory_path = (
+            generation_job_directory_path / pose_preset_identifier / "video"
+        )
         generation_video_directory_path.mkdir(parents=True, exist_ok=True)
 
         video_file_suffix = generated_video_file_path.suffix.lower() or ".mp4"
-        copied_generated_video_file_path = generation_video_directory_path / f"generated{video_file_suffix}"
+        copied_generated_video_file_path = (
+            generation_video_directory_path / f"generated{video_file_suffix}"
+        )
         shutil.copy2(generated_video_file_path, copied_generated_video_file_path)
 
         return GeneratedVideoAsset(
@@ -275,7 +286,8 @@ class PosePipelineOrchestrator:
         orchestrator_output_directory = output_base_directory / "pipeline_orchestrator"
         orchestrator_output_directory.mkdir(parents=True, exist_ok=True)
         orchestrator_summary_json_file_path = (
-            orchestrator_output_directory / f"pipeline_summary_{selected_generation_job_identifier}.json"
+            orchestrator_output_directory
+            / f"pipeline_summary_{selected_generation_job_identifier}.json"
         )
 
         orchestrator_payload = {

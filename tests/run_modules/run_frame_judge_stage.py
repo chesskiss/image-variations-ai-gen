@@ -42,13 +42,18 @@ def load_frame_candidates_for_judging_from_directory(
             for frame_file_path in frames_directory.iterdir()
             if frame_file_path.is_file()
             and frame_file_path.suffix.lower() in {".jpg", ".jpeg", ".png"}
-            and (original_image_file_path is None or frame_file_path.resolve() != original_image_file_path.resolve())
+            and (
+                original_image_file_path is None
+                or frame_file_path.resolve() != original_image_file_path.resolve()
+            )
         ]
     )
 
     frame_candidates_for_judging: list[FrameCandidateForJudging] = []
     for fallback_sequence_index, frame_file_path in enumerate(frame_file_paths, start=1):
-        frame_sequence_number = parse_frame_sequence_number(frame_file_path.name, fallback_sequence_index)
+        frame_sequence_number = parse_frame_sequence_number(
+            frame_file_path.name, fallback_sequence_index
+        )
         image_width_pixels, image_height_pixels = read_frame_dimensions(frame_file_path)
         frame_candidates_for_judging.append(
             FrameCandidateForJudging(
@@ -93,7 +98,10 @@ def resolve_original_image_file_path(
         resolved_original_image_file_path = (
             Path(optional_original_image_file_path_argument).expanduser().resolve()
         )
-        if not resolved_original_image_file_path.exists() or not resolved_original_image_file_path.is_file():
+        if (
+            not resolved_original_image_file_path.exists()
+            or not resolved_original_image_file_path.is_file()
+        ):
             raise ValueError(
                 f"Original image file does not exist: {resolved_original_image_file_path}"
             )
@@ -109,7 +117,10 @@ def resolve_original_image_file_path(
     ]
     for candidate_original_file_name in candidate_original_file_names:
         candidate_original_image_file_path = frames_directory / candidate_original_file_name
-        if candidate_original_image_file_path.exists() and candidate_original_image_file_path.is_file():
+        if (
+            candidate_original_image_file_path.exists()
+            and candidate_original_image_file_path.is_file()
+        ):
             return candidate_original_image_file_path.resolve()
 
     return None
@@ -180,8 +191,7 @@ def main() -> None:
 
     print(f"Frame judge results written to: {result_output_directory}")
     print(
-        "Selected frame sequence numbers: "
-        f"{frame_judge_decision.selected_frame_sequence_numbers}"
+        f"Selected frame sequence numbers: {frame_judge_decision.selected_frame_sequence_numbers}"
     )
 
 

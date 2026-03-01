@@ -10,7 +10,10 @@ from frame_judge_stage.domain_models import (
     GenerationJobIdentifier,
     PosePresetIdentifier,
 )
-from frame_judge_stage.frame_selection_service import FrameSelectionService, FrameSelectionServiceError
+from frame_judge_stage.frame_selection_service import (
+    FrameSelectionService,
+    FrameSelectionServiceError,
+)
 from frame_judge_stage.rule_based_frame_judge import RuleBasedFrameJudge
 
 
@@ -34,7 +37,9 @@ def _build_frame_candidate_for_judging(
 
 def test_frame_judge_contract_outputs_one_score_per_input_frame_candidate() -> None:
     frame_candidates_for_judging = [
-        _build_frame_candidate_for_judging(frame_sequence_number=1, file_size_bytes=10_000, timestamp_seconds=1.0)
+        _build_frame_candidate_for_judging(
+            frame_sequence_number=1, file_size_bytes=10_000, timestamp_seconds=1.0
+        )
     ]
 
     rule_based_frame_judge = RuleBasedFrameJudge()
@@ -47,7 +52,9 @@ def test_frame_judge_contract_outputs_one_score_per_input_frame_candidate() -> N
 
 def test_frame_judge_contract_rejects_invalid_score_range() -> None:
     frame_candidates_for_judging = [
-        _build_frame_candidate_for_judging(frame_sequence_number=1, file_size_bytes=1_000, timestamp_seconds=1.0)
+        _build_frame_candidate_for_judging(
+            frame_sequence_number=1, file_size_bytes=1_000, timestamp_seconds=1.0
+        )
     ]
     frame_judge_scores = [
         FrameJudgeScore(

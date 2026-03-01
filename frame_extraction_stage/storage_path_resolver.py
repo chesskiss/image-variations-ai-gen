@@ -19,7 +19,9 @@ class StoragePathResolver:
         generation_job_identifier: GenerationJobIdentifier,
     ) -> Path:
         generation_job_directory = self._storage_base_directory / str(generation_job_identifier)
-        return self._resolve_and_ensure_path_within_storage(generation_job_directory, create_directory=True)
+        return self._resolve_and_ensure_path_within_storage(
+            generation_job_directory, create_directory=True
+        )
 
     def resolve_frames_output_directory(
         self,
@@ -27,7 +29,10 @@ class StoragePathResolver:
         pose_preset_identifier: PosePresetIdentifier,
     ) -> Path:
         output_directory_for_extracted_frames = (
-            self._storage_base_directory / str(generation_job_identifier) / str(pose_preset_identifier) / "frames"
+            self._storage_base_directory
+            / str(generation_job_identifier)
+            / str(pose_preset_identifier)
+            / "frames"
         )
         return self._resolve_and_ensure_path_within_storage(
             output_directory_for_extracted_frames,
@@ -42,7 +47,10 @@ class StoragePathResolver:
         resolved_local_video_file_path = local_video_file_path.resolve()
         generation_job_directory = self.resolve_generation_job_directory(generation_job_identifier)
 
-        if not resolved_local_video_file_path.exists() or not resolved_local_video_file_path.is_file():
+        if (
+            not resolved_local_video_file_path.exists()
+            or not resolved_local_video_file_path.is_file()
+        ):
             raise StoragePathResolutionError(
                 f"Video file does not exist or is not a file: {resolved_local_video_file_path}"
             )

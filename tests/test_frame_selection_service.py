@@ -57,7 +57,10 @@ def test_selection_ranking_is_deterministic_with_tie_breakers() -> None:
     )
 
     assert frame_judge_decision.selected_frame_sequence_numbers == [2, 3]
-    assert [frame_judge_score.frame_sequence_number for frame_judge_score in frame_judge_decision.ranked_frame_scores] == [2, 3, 1]
+    assert [
+        frame_judge_score.frame_sequence_number
+        for frame_judge_score in frame_judge_decision.ranked_frame_scores
+    ] == [2, 3, 1]
 
 
 def test_selection_returns_empty_decision_for_empty_input() -> None:
