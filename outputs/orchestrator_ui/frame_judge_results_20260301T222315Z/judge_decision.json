@@ -1,0 +1,10 @@
+{
+  "generation_job_identifier": "363e17c5b24a4669a8cb437b3d364a56",
+  "pose_preset_identifier": "step_forward_head_tilt",
+  "selection_policy_name": "score_desc_file_size_desc_sequence_asc",
+  "selected_count": 2,
+  "selected_frame_sequence_numbers": [
+    4,
+    3
+  ]
+}

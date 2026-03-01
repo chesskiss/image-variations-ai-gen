@@ -19,7 +19,7 @@ SCAFFOLD_DIRECTORY = Path(__file__).resolve().parent
 UPLOAD_STORAGE_DIRECTORY = PROJECT_ROOT_DIRECTORY / "storage" / "ui_uploads"
 ORCHESTRATOR_OUTPUT_DIRECTORY = PROJECT_ROOT_DIRECTORY / "outputs" / "orchestrator_ui"
 
-application = FastAPI(title="PoseVariations UI Bridge")
+application = FastAPI(title="AI Image Variations UI Bridge")
 application.mount("/static", StaticFiles(directory=str(SCAFFOLD_DIRECTORY / "static")), name="static")
 template_renderer = Jinja2Templates(directory=str(SCAFFOLD_DIRECTORY / "templates"))
 

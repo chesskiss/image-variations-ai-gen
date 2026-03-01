@@ -1,10 +1,10 @@
 services:
-  posevariations:
+  AI Image Variations:
     build:
       context: .
       dockerfile: Dockerfile
-    image: posevariations:latest
-    container_name: posevariations
+    image: AI Image Variations:latest
+    container_name: AI Image Variations
     env_file:
       - .env
     ports:
