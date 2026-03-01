@@ -1,0 +1,16 @@
+.git
+.gitignore
+.venv
+.pytest_cache
+.mypy_cache
+.ruff_cache
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.DS_Store
+
+storage
+outputs
+htmlcov
+coverage.xml

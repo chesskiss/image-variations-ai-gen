@@ -1,0 +1,112 @@
+[
+  {
+    "frame_sequence_number": 4,
+    "judge_score": 0.921038510168656,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 0.9729121573837944,
+      "center_timestamp_bonus": 0.8
+    }
+  },
+  {
+    "frame_sequence_number": 3,
+    "judge_score": 0.8799999999999999,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 1.0,
+      "center_timestamp_bonus": 0.6
+    }
+  },
+  {
+    "frame_sequence_number": 5,
+    "judge_score": 0.8238411589482031,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 0.7483445127831473,
+      "center_timestamp_bonus": 1.0
+    }
+  },
+  {
+    "frame_sequence_number": 6,
+    "judge_score": 0.633173392195101,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 0.56167627456443,
+      "center_timestamp_bonus": 0.8
+    }
+  },
+  {
+    "frame_sequence_number": 2,
+    "judge_score": 0.5722705355420783,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 0.6461007650601118,
+      "center_timestamp_bonus": 0.4
+    }
+  },
+  {
+    "frame_sequence_number": 7,
+    "judge_score": 0.46846516512011654,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 0.412093093028738,
+      "center_timestamp_bonus": 0.6
+    }
+  },
+  {
+    "frame_sequence_number": 1,
+    "judge_score": 0.4106300495038896,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 0.5009000707198423,
+      "center_timestamp_bonus": 0.19999999999999996
+    }
+  },
+  {
+    "frame_sequence_number": 8,
+    "judge_score": 0.37361742708355655,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 0.3623106101193665,
+      "center_timestamp_bonus": 0.4
+    }
+  },
+  {
+    "frame_sequence_number": 9,
+    "judge_score": 0.2743668431091014,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 0.30623834729871635,
+      "center_timestamp_bonus": 0.19999999999999996
+    }
+  },
+  {
+    "frame_sequence_number": 10,
+    "judge_score": 0.18770224803377408,
+    "judge_confidence": 0.5,
+    "judge_reasoning_summary": "Rule-based baseline score from frame size and timestamp.",
+    "judge_model_name": "rule-based-baseline",
+    "score_components": {
+      "normalized_file_size_score": 0.26814606861967727,
+      "center_timestamp_bonus": 0.0
+    }
+  }
+]

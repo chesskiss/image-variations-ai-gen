@@ -1,0 +1,10 @@
+{
+  "generation_job_identifier": "757dcca356df4305a17b2fba9008e3e8",
+  "pose_preset_identifier": "rotate_left",
+  "selection_policy_name": "score_desc_file_size_desc_sequence_asc",
+  "selected_count": 2,
+  "selected_frame_sequence_numbers": [
+    4,
+    3
+  ]
+}

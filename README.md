@@ -241,3 +241,24 @@ This writes:
 - orchestrator summary under `outputs/orchestrator/pipeline_orchestrator/pipeline_summary_<job>.json`
 
 This orchestrator is library-first (in-process Python imports). It is API-ready because it emits a stable JSON summary payload that can be returned directly by a future backend endpoint.
+
+## Docker
+
+Run the integrated UI + orchestrator app in Docker.
+
+```bash
+docker compose up --build
+```
+
+Open `http://127.0.0.1:8000`.
+
+Persistent data is mounted to host directories:
+
+- `./storage` -> `/app/storage`
+- `./outputs` -> `/app/outputs`
+
+Stop containers:
+
+```bash
+docker compose down
+```

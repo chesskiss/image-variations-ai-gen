@@ -30,6 +30,28 @@ dependencies = [
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
+[tool.hatch.build.targets.wheel]
+packages = [
+  "single_image_transform",
+  "frame_extraction_stage",
+  "frame_judge_stage",
+  "orchestration_stage",
+]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "single_image_transform",
+  "frame_extraction_stage",
+  "frame_judge_stage",
+  "orchestration_stage",
+  "scaffold",
+  "run_single_image_transform.py",
+  "run_frame_judge_stage.py",
+  "run_pose_pipeline_orchestrator.py",
+  "README.md",
+  "QUICK LAUNCH.md",
+]
+
 [tool.ruff]
 line-length = 100
 target-version = "py311"
@@ -65,7 +87,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["pose_variations"]
+source = ["single_image_transform", "frame_extraction_stage", "frame_judge_stage", "orchestration_stage"]
 omit = ["*/__init__.py"]
 
 [tool.coverage.report]
