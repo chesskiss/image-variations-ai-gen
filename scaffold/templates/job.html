@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PoseVariations Job</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page-layout">
+      <section class="card" id="job-card">
+        <h1>Generation Job <span id="job-id"></span></h1>
+        <p class="status-line">
+          Status: <strong id="job-status"></strong>
+        </p>
+        <p class="error-text" id="failure-reason"></p>
+
+        <h2>Progress</h2>
+        <ul id="progress-updates" class="progress-list"></ul>
+
+        <h2>Selected Frames</h2>
+        <div id="selected-frames" class="media-grid"></div>
+
+        <h2>Generated Videos</h2>
+        <ul id="generated-videos"></ul>
+
+        <h2>More Candidates</h2>
+        <div id="more-candidates" class="media-grid"></div>
+      </section>
+    </main>
+
+    <script>
+      const initialGenerationJob = {{ generation_job | tojson }};
+      const jobIdElement = document.getElementById("job-id");
+      const jobStatusElement = document.getElementById("job-status");
+      const failureReasonElement = document.getElementById("failure-reason");
+      const progressUpdatesElement = document.getElementById("progress-updates");
+      const selectedFramesElement = document.getElementById("selected-frames");
+      const generatedVideosElement = document.getElementById("generated-videos");
+      const moreCandidatesElement = document.getElementById("more-candidates");
+
+      function renderJobState(generationJob) {
+        jobIdElement.textContent = generationJob.generation_job_identifier;
+        jobStatusElement.textContent = generationJob.generation_job_status;
+
+        if (generationJob.failure_reason) {
+          failureReasonElement.textContent = generationJob.failure_reason;
+        } else {
+          failureReasonElement.textContent = "";
+        }
+
+        progressUpdatesElement.innerHTML = "";
+        for (const progressUpdate of generationJob.progress_updates) {
+          const listItem = document.createElement("li");
+          listItem.textContent = `${progressUpdate.created_at_utc} - ${progressUpdate.stage_name}: ${progressUpdate.status_message}`;
+          progressUpdatesElement.appendChild(listItem);
+        }
+
+        selectedFramesElement.innerHTML = "";
+        for (const selectedFrame of generationJob.selected_frames) {
+          const frameCard = document.createElement("article");
+          frameCard.className = "media-card";
+          const frameImage = document.createElement("img");
+          frameImage.src = selectedFrame.public_asset_url;
+          frameImage.alt = `Selected frame ${selectedFrame.asset_identifier}`;
+          const frameLabel = document.createElement("p");
+          const similarityLabel = selectedFrame.identity_similarity_score === null || selectedFrame.identity_similarity_score === undefined
+            ? "N/A"
+            : selectedFrame.identity_similarity_score.toFixed(3);
+          frameLabel.textContent = `t=${selectedFrame.frame_timestamp_seconds.toFixed(1)}s | similarity=${similarityLabel}`;
+          frameCard.appendChild(frameImage);
+          frameCard.appendChild(frameLabel);
+          selectedFramesElement.appendChild(frameCard);
+        }
+
+        generatedVideosElement.innerHTML = "";
+        for (const generatedVideo of generationJob.generated_videos) {
+          const listItem = document.createElement("li");
+          const anchorElement = document.createElement("a");
+          anchorElement.href = generatedVideo.public_asset_url;
+          anchorElement.textContent = `Video for preset ${generatedVideo.pose_preset_identifier}`;
+          anchorElement.target = "_blank";
+          anchorElement.rel = "noreferrer";
+          listItem.appendChild(anchorElement);
+          generatedVideosElement.appendChild(listItem);
+        }
+
+        moreCandidatesElement.innerHTML = "";
+        for (const candidate of generationJob.more_candidates.slice(0, 10)) {
+          const candidateCard = document.createElement("article");
+          candidateCard.className = "media-card";
+          const candidateImage = document.createElement("img");
+          candidateImage.src = candidate.public_asset_url;
+          candidateImage.alt = `Candidate frame ${candidate.frame_asset_identifier}`;
+          const candidateLabel = document.createElement("p");
+          const identityValue = candidate.identity_similarity_score === null || candidate.identity_similarity_score === undefined
+            ? "N/A"
+            : candidate.identity_similarity_score.toFixed(3);
+          const diversityValue = candidate.diversity_score_from_primary_frame === null || candidate.diversity_score_from_primary_frame === undefined
+            ? "N/A"
+            : candidate.diversity_score_from_primary_frame.toFixed(1);
+          candidateLabel.textContent = `score=${candidate.aggregate_selection_score.toFixed(3)} | sharpness=${candidate.sharpness_score.toFixed(1)} | identity=${identityValue} | diversity=${diversityValue}`;
+          candidateCard.appendChild(candidateImage);
+          candidateCard.appendChild(candidateLabel);
+          moreCandidatesElement.appendChild(candidateCard);
+        }
+      }
+
+      async function pollGenerationJobStatus(generationJobIdentifier) {
+        const response = await fetch(`/api/jobs/${generationJobIdentifier}`, {
+          headers: { "Cache-Control": "no-cache" },
+        });
+        if (!response.ok) {
+          return;
+        }
+        const generationJob = await response.json();
+        renderJobState(generationJob);
+
+        if (["completed", "failed"].includes(generationJob.generation_job_status)) {
+          return;
+        }
+
+        setTimeout(() => {
+          pollGenerationJobStatus(generationJobIdentifier);
+        }, 2000);
+      }
+
+      renderJobState(initialGenerationJob);
+      pollGenerationJobStatus(initialGenerationJob.generation_job_identifier);
+    </script>
+  </body>
+</html>
