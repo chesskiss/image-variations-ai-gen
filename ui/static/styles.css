@@ -148,6 +148,36 @@ button:hover {
   grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
 }
 
+.history-filter-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.history-list {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.history-card {
+  border: 1px solid rgba(47, 93, 80, 0.22);
+  border-radius: 10px;
+  background: #fff;
+  padding: 0.8rem;
+}
+
+.history-card h3 {
+  margin-top: 0;
+  margin-bottom: 0.3rem;
+}
+
+.history-thumbnail {
+  width: min(280px, 100%);
+  border-radius: 8px;
+  display: block;
+}
+
 .media-card {
   border: 1px solid rgba(47, 93, 80, 0.2);
   border-radius: 10px;

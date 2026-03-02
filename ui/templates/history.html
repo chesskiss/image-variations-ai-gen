@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Image Variations History</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <main class="page-layout">
+      <section class="card">
+        <h1>Job History</h1>
+        <p class="muted-text">Latest jobs and cache usage across the UI pipeline.</p>
+        <p><a href="/">Start new job</a></p>
+
+        <div class="history-filter-row">
+          <label for="history-state-filter">Filter by state</label>
+          <select id="history-state-filter">
+            <option value="">All</option>
+            <option value="completed">Completed</option>
+            <option value="failed">Failed</option>
+            <option value="running">Running</option>
+            <option value="queued">Queued</option>
+          </select>
+        </div>
+
+        <div id="history-list" class="history-list"></div>
+      </section>
+    </main>
+
+    <script>
+      const historyListElement = document.getElementById("history-list");
+      const historyStateFilterElement = document.getElementById("history-state-filter");
+
+      function renderHistoryEntry(historyEntry) {
+        const articleElement = document.createElement("article");
+        articleElement.className = "history-card";
+
+        const titleElement = document.createElement("h3");
+        const titleLinkElement = document.createElement("a");
+        titleLinkElement.href = `/jobs/${historyEntry.job_id}`;
+        titleLinkElement.textContent = String(historyEntry.job_id);
+        titleElement.appendChild(titleLinkElement);
+        articleElement.appendChild(titleElement);
+
+        const detailsElement = document.createElement("p");
+        detailsElement.textContent = `preset=${historyEntry.pose_preset_identifier} state=${historyEntry.state} cache_hit=${historyEntry.was_cache_hit}`;
+        articleElement.appendChild(detailsElement);
+
+        if (historyEntry.thumbnail_url) {
+          const imageElement = document.createElement("img");
+          imageElement.src = historyEntry.thumbnail_url;
+          imageElement.alt = "history thumbnail";
+          imageElement.className = "history-thumbnail";
+          articleElement.appendChild(imageElement);
+        }
+
+        const sequenceElement = document.createElement("p");
+        sequenceElement.textContent = `selected=${JSON.stringify(historyEntry.selected_frame_sequence_numbers || [])}`;
+        articleElement.appendChild(sequenceElement);
+
+        return articleElement;
+      }
+
+      async function loadHistory() {
+        const stateValue = historyStateFilterElement.value;
+        const queryString = stateValue ? `?limit=50&state=${encodeURIComponent(stateValue)}` : "?limit=50";
+        const response = await fetch(`/api/history${queryString}`);
+        if (!response.ok) {
+          historyListElement.innerHTML = "<p class='error-text'>Failed to load history.</p>";
+          return;
+        }
+
+        const payload = await response.json();
+        const entries = payload.entries || [];
+        historyListElement.innerHTML = "";
+        if (entries.length === 0) {
+          historyListElement.innerHTML = "<p class='muted-text'>No history entries yet.</p>";
+          return;
+        }
+
+        entries.forEach((historyEntry) => {
+          historyListElement.appendChild(renderHistoryEntry(historyEntry));
+        });
+      }
+
+      historyStateFilterElement.addEventListener("change", loadHistory);
+      loadHistory();
+    </script>
+  </body>
+</html>

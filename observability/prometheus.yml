@@ -1,0 +1,9 @@
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: ai-image-variations
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+          - ai-image-variations:8000

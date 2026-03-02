@@ -17,6 +17,7 @@ dependencies = [
   "numpy>=1.26.0,<3.0.0",
   "opencv-python-headless>=4.10.0.84,<5.0.0",
   "imagehash>=4.3.1,<5.0.0",
+  "prometheus-client>=0.21.1,<1.0.0",
   "ruff>=0.9.0,<1.0.0",
   "mypy>=1.12.0,<2.0.0",
   "pytest>=8.3.0,<9.0.0",
@@ -36,6 +37,7 @@ packages = [
   "frame_extraction_stage",
   "frame_judge_stage",
   "orchestration_stage",
+  "ui",
 ]
 
 [tool.hatch.build.targets.sdist]
@@ -87,7 +89,7 @@ markers = [
 ]
 
 [tool.coverage.run]
-source = ["single_image_transform", "frame_extraction_stage", "frame_judge_stage", "orchestration_stage"]
+source = ["single_image_transform", "frame_extraction_stage", "frame_judge_stage", "orchestration_stage", "ui"]
 omit = ["*/__init__.py"]
 
 [tool.coverage.report]

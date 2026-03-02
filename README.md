@@ -24,6 +24,8 @@ docker compose up --build
 
 ### 3) Open
 `http://127.0.0.1:8000`
+- Metrics: `http://127.0.0.1:8000/metrics`
+- History: `http://127.0.0.1:8000/history`
 
 ### 4) Stop
 ```bash
@@ -33,6 +35,13 @@ docker compose down
 Persistent data:
 - `./storage`
 - `./outputs`
+
+### Optional Observability Stack
+```bash
+docker compose -f docker-compose.yml -f docker-compose.observability.yml up -d
+```
+- Prometheus: `http://127.0.0.1:9090`
+- Grafana: `http://127.0.0.1:3000` (`admin` / `admin`)
 
 ## Developer Usage (uv / Local) - Works on MacOS (Windows not guaranteed)
 
@@ -56,7 +65,7 @@ uv run uvicorn ui.app:application --reload
 - Lint: `uv run ruff check .`
 - Format: `uv run ruff format .`
 - Type check: `uv run mypy .`
-- Test: `uv run pytest --cov=pose_variations --cov-report=term-missing`
+- Test: `uv run pytest --cov=ui --cov=single_image_transform --cov=frame_extraction_stage --cov=frame_judge_stage --cov=orchestration_stage --cov-report=term-missing`
 - Pre-commit install: `uv run pre-commit install`
 
 ### Run full orchestrator directly
@@ -104,11 +113,27 @@ Judge:
 - `FRAME_JUDGE_MINIMUM_SCORE_THRESHOLD` (default: `0.0`)
 - `FRAME_JUDGE_TIMEOUT_SECONDS` (default: `45`)
 
+Cache:
+- `ENABLE_RESULT_CACHE` (default: `true`)
+- `CACHE_INDEX_DIRECTORY` (default: `./outputs/cache_index`)
+- `CACHE_MAX_ENTRIES` (default: `1000`)
+- `CACHE_RETENTION_DAYS` (default: `30`)
+- `CACHE_KEY_INCLUDE_MODEL_VERSION` (default: `true`)
+
+## API Endpoints
+
+- `GET /api/jobs/{job_id}`: job status + cache metadata
+- `GET /api/cache/{cache_key}`: cache lookup debug endpoint
+- `GET /api/history?limit=50&state=completed`: history index
+- `GET /metrics`: Prometheus metrics
+
 ## Output Locations
 
 - Extracted frames: `storage/<job>/<preset>/frames/`
 - Judge outputs: `outputs/frame_judge_results_<timestamp>/`
 - Orchestrator summary: `outputs/orchestrator/pipeline_orchestrator/pipeline_summary_<job>.json`
+- UI job statuses and logs: `outputs/orchestrator_ui/jobs/<job>/`
+- Cache index file: `outputs/cache_index/cache_index.json`
 
 ## Security Notes
 
